@@ -98,6 +98,9 @@ public class MapEngine {
       StringBuilder routeList = new StringBuilder();
       for (int i = 0; i < routeReferences.size(); i++) {
         routeList.append(routeReferences.get(i).getName());
+        if (i != routeReferences.size() - 1) {
+          routeList.append(", ");
+        }
       }
       MessageCli.ROUTE_INFO.printMessage("[" + routeList.toString() + "]");
     }

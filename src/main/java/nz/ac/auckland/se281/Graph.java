@@ -1,6 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Queue;
 
 public class Graph {
   private Map<Countries, List<Countries>> adjCountries;
+  private Countries destination;
+  private Countries root;
 
   public Graph() {
     this.adjCountries = new HashMap<>();
@@ -47,21 +50,54 @@ public class Graph {
     return null;
   }
 
+  // I need to create a hashmap where I store the current country and the previous country it is
+  // connected to and then return the route
+  // Might have to add overrides for hashmap
+
   public List<Countries> breathFirstTraversal(Countries root, Countries destination) {
-    List<Countries> visited = new ArrayList<>();
+    this.destination = destination;
+    this.root = root;
+    List<Countries> visited = new LinkedList<>();
     Queue<Countries> queue = new LinkedList<>();
+    Map<Countries, Countries> connectedCountries = new HashMap<>();
     queue.add(root);
     visited.add(root);
+
     while (!queue.isEmpty()
         && !visited.contains(destination)) { // Added this to check if the destination is reached
       Countries node = queue.poll();
-      for (Countries n : adjCountries.get(node)) {
-        if (!visited.contains(n)) {
-          visited.add(n);
-          queue.add(n);
+      for (Countries neighbour : adjCountries.get(node)) {
+        if (!visited.contains(neighbour)) {
+          visited.add(neighbour);
+          connectedCountries.put(neighbour, node);
+          queue.add(neighbour);
         }
       }
     }
-    return visited;
+    return returnRoute(connectedCountries);
+  }
+
+  public List<Countries> returnRoute(Map<Countries, Countries> connectedCountries) {
+    Countries destinationCountry = connectedCountries.get(this.destination);
+    Countries linkedCountry;
+    List<Countries> route = new LinkedList<>();
+    route.add(this.destination); // Add destination first
+    route.add(destinationCountry); // Add the country linked to the destination
+
+    while (!destinationCountry.getName().equals(this.root.getName())) {
+      for (Countries country : connectedCountries.keySet()) {
+        if (country.getName().equals(destinationCountry.getName())) {
+          linkedCountry =
+              connectedCountries.get(
+                  destinationCountry); // add the country linked to the destination
+          route.add(linkedCountry);
+          destinationCountry = linkedCountry; // set next destination to the linked country
+          break; // break out of loop to rerun with new desination
+        }
+      }
+    }
+
+    Collections.reverse(route);
+    return route;
   }
 }
