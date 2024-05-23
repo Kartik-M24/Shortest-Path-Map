@@ -16,18 +16,27 @@ public class MapEngine {
 
   /** invoked one time only when constructing the MapEngine class. */
   private void loadMap() {
-    List<String> countries = Utils.readCountries();
     List<String> adjacencies = Utils.readAdjacencies();
-    // Create the graph using a countries class and an adjacencies class
     Graph graph = new Graph();
-    // Add the countries to the graph
-    for (String country : countries) {
-      String[] countryData = country.split(",");
-      Countries newCountry =
-          new Countries(countryData[0], countryData[1], Double.parseDouble(countryData[2]));
-      graph.addCountry(newCountry);
+
+    // Add countries and its  adjacencies to the graph
+    for (String adjacency : adjacencies) {
+      String[] adjacencyData = adjacency.split(",");
+      String country1 = adjacencyData[0]; // gets the country vertex
+      validCountryInput(country1); // gets the country name, continent and tax fees from the vertex
+      Countries mainCountry = new Countries(countryName, continent, Double.parseDouble(taxFees));
+      graph.addCountry(mainCountry);
+
+      // Loop through the adjacent countries, adds the edge and the adjacent countries to the graph
+      for (int i = 1; i < adjacencyData.length; i++) {
+        String country2 = adjacencyData[i];
+        validCountryInput(country2); // gets the country name, continent and tax fees
+        Countries adjacentCountry =
+            new Countries(countryName, continent, Double.parseDouble(taxFees));
+        graph.addCountry(adjacentCountry);
+        graph.addAdjacency(mainCountry, adjacentCountry);
+      }
     }
-    // Add the adjacencies to the graph
   }
 
   public boolean validCountryInput(String countryInput) {
@@ -51,11 +60,10 @@ public class MapEngine {
     return true;
   }
 
-  /** this method is invoked when the user run the command info-country. */
-  public void showInfoCountry() {
+  public void forceValidInput(String message) {
     boolean isValid = false;
     while (isValid == false) {
-      MessageCli.INSERT_COUNTRY.printMessage();
+      System.out.println(message);
       countryInput = Utils.scanner.nextLine();
       countryInput = Utils.capitalizeFirstLetterOfEachWord(countryInput);
       try {
@@ -64,9 +72,20 @@ public class MapEngine {
         MessageCli.INVALID_COUNTRY.printMessage(countryInput);
       }
     }
+  }
+
+  /** this method is invoked when the user run the command info-country. */
+  public void showInfoCountry() {
+    String message = MessageCli.INSERT_COUNTRY.getMessage();
+    forceValidInput(message);
     MessageCli.COUNTRY_INFO.printMessage(countryName, continent, taxFees);
   }
 
   /** this method is invoked when the user run the command route. */
-  public void showRoute() {}
+  public void showRoute() {
+    String countryFrom = MessageCli.INSERT_COUNTRY.getMessage();
+    forceValidInput(countryFrom);
+    String countryTo = MessageCli.INSERT_DESTINATION.getMessage();
+    forceValidInput(countryTo);
+  }
 }
