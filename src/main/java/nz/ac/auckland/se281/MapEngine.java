@@ -9,6 +9,7 @@ public class MapEngine {
   private String countryName;
   private String continent;
   private String taxFees;
+  private Graph graph;
 
   public MapEngine() {
     loadMap(); // keep this method invocation
@@ -17,7 +18,7 @@ public class MapEngine {
   /** invoked one time only when constructing the MapEngine class. */
   private void loadMap() {
     List<String> adjacencies = Utils.readAdjacencies();
-    Graph graph = new Graph();
+    graph = new Graph();
 
     // Add countries and its  adjacencies to the graph
     for (String adjacency : adjacencies) {
@@ -60,10 +61,9 @@ public class MapEngine {
     return true;
   }
 
-  public void forceValidInput(String message) {
+  public void forceValidInput() {
     boolean isValid = false;
     while (isValid == false) {
-      System.out.println(message);
       countryInput = Utils.scanner.nextLine();
       countryInput = Utils.capitalizeFirstLetterOfEachWord(countryInput);
       try {
@@ -76,16 +76,30 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
-    String message = MessageCli.INSERT_COUNTRY.getMessage();
-    forceValidInput(message);
+    MessageCli.INSERT_COUNTRY.printMessage();
+    forceValidInput();
     MessageCli.COUNTRY_INFO.printMessage(countryName, continent, taxFees);
   }
 
   /** this method is invoked when the user run the command route. */
   public void showRoute() {
-    String countryFrom = MessageCli.INSERT_COUNTRY.getMessage();
-    forceValidInput(countryFrom);
-    String countryTo = MessageCli.INSERT_DESTINATION.getMessage();
-    forceValidInput(countryTo);
+    MessageCli.INSERT_COUNTRY.printMessage();
+    forceValidInput();
+    Countries sourceCountry = graph.getCountry(countryInput);
+    MessageCli.INSERT_DESTINATION.printMessage();
+    forceValidInput();
+    Countries destinationCountry = graph.getCountry(countryInput);
+    if (sourceCountry.getName().equals(destinationCountry.getName())) {
+      MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
+      return;
+    } else {
+      List<Countries> routeReferences =
+          graph.breathFirstTraversal(sourceCountry, destinationCountry);
+      StringBuilder routeList = new StringBuilder();
+      for (int i = 0; i < routeReferences.size(); i++) {
+        routeList.append(routeReferences.get(i).getName());
+      }
+      MessageCli.ROUTE_INFO.printMessage("[" + routeList.toString() + "]");
+    }
   }
 }
