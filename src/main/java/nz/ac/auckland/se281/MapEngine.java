@@ -1,6 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /** This class is the main entry point. */
 public class MapEngine {
@@ -96,15 +97,18 @@ public class MapEngine {
     } else {
       List<Countries> routeReferences =
           graph.breathFirstTraversal(sourceCountry, destinationCountry);
+      CopyOnWriteArrayList<String> continentsRoute = new CopyOnWriteArrayList<>();
       StringBuilder routeList = new StringBuilder();
-      
+
       for (int i = 0; i < routeReferences.size(); i++) {
         routeList.append(routeReferences.get(i).getName());
+        continentsRoute.addIfAbsent(routeReferences.get(i).getContinent());
         if (i != routeReferences.size() - 1) {
           routeList.append(", ");
         }
       }
       MessageCli.ROUTE_INFO.printMessage("[" + routeList.toString() + "]");
+      MessageCli.CONTINENT_INFO.printMessage(continentsRoute.toString());
     }
   }
 }

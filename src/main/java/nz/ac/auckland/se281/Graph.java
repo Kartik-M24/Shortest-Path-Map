@@ -83,7 +83,6 @@ public class Graph {
 
     while (!destinationCountry.getName().equals(this.root.getName())) {
       for (Countries country : connectedCountries.keySet()) {
-        System.out.println(country.getName() + " " + connectedCountries.get(country).getName());
         if (country.getName().equals(destinationCountry.getName())) {
           linkedCountry =
               connectedCountries.get(
