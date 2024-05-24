@@ -3,6 +3,7 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ public class Graph {
     addCountry(country1);
     addCountry(country2);
     adjCountries.get(country1).add(country2);
-    adjCountries.get(country2).add(country1);
   }
 
   public void removeCountry(Countries country) {
@@ -50,16 +50,12 @@ public class Graph {
     return null;
   }
 
-  // I need to create a hashmap where I store the current country and the previous country it is
-  // connected to and then return the route
-  // Might have to add overrides for hashmap
-
   public List<Countries> breathFirstTraversal(Countries root, Countries destination) {
     this.destination = destination;
     this.root = root;
     List<Countries> visited = new LinkedList<>();
     Queue<Countries> queue = new LinkedList<>();
-    Map<Countries, Countries> connectedCountries = new HashMap<>();
+    Map<Countries, Countries> connectedCountries = new LinkedHashMap<>();
     queue.add(root);
     visited.add(root);
 
@@ -83,16 +79,18 @@ public class Graph {
     List<Countries> route = new LinkedList<>();
     route.add(this.destination); // Add destination first
     route.add(destinationCountry); // Add the country linked to the destination
+    System.out.println(this.destination.getName() + " " + destinationCountry.getName());
 
     while (!destinationCountry.getName().equals(this.root.getName())) {
       for (Countries country : connectedCountries.keySet()) {
+        System.out.println(country.getName() + " " + connectedCountries.get(country).getName());
         if (country.getName().equals(destinationCountry.getName())) {
           linkedCountry =
               connectedCountries.get(
                   destinationCountry); // add the country linked to the destination
           route.add(linkedCountry);
           destinationCountry = linkedCountry; // set next destination to the linked country
-          break; // break out of loop to rerun with new desination
+          // break out of loop to rerun with new desination
         }
       }
     }

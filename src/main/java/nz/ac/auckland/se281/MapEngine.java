@@ -89,6 +89,7 @@ public class MapEngine {
     MessageCli.INSERT_DESTINATION.printMessage();
     forceValidInput();
     Countries destinationCountry = graph.getCountry(countryInput);
+
     if (sourceCountry.getName().equals(destinationCountry.getName())) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
@@ -96,6 +97,7 @@ public class MapEngine {
       List<Countries> routeReferences =
           graph.breathFirstTraversal(sourceCountry, destinationCountry);
       StringBuilder routeList = new StringBuilder();
+      
       for (int i = 0; i < routeReferences.size(); i++) {
         routeList.append(routeReferences.get(i).getName());
         if (i != routeReferences.size() - 1) {
