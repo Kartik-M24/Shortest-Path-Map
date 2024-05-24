@@ -98,17 +98,22 @@ public class MapEngine {
       List<Countries> routeReferences =
           graph.breathFirstTraversal(sourceCountry, destinationCountry);
       CopyOnWriteArrayList<String> continentsRoute = new CopyOnWriteArrayList<>();
+      int totalTax = 0;
       StringBuilder routeList = new StringBuilder();
 
       for (int i = 0; i < routeReferences.size(); i++) {
         routeList.append(routeReferences.get(i).getName());
         continentsRoute.addIfAbsent(routeReferences.get(i).getContinent());
+        if (i >= 1) {
+          totalTax += routeReferences.get(i).getTaxFees();
+        }
         if (i != routeReferences.size() - 1) {
           routeList.append(", ");
         }
       }
       MessageCli.ROUTE_INFO.printMessage("[" + routeList.toString() + "]");
       MessageCli.CONTINENT_INFO.printMessage(continentsRoute.toString());
+      MessageCli.TAX_INFO.printMessage(String.valueOf(totalTax));
     }
   }
 }
