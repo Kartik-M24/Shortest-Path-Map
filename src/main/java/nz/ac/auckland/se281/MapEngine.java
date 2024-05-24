@@ -3,7 +3,10 @@ package nz.ac.auckland.se281;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/** This class is the main entry point. */
+/**
+ * This class is the main entry point for the MapEngine application. It is responsible for loading
+ * and managing the map data.
+ */
 public class MapEngine {
 
   private String countryInput;
@@ -12,11 +15,15 @@ public class MapEngine {
   private String taxFees;
   private Graph graph;
 
+  /** The constructor for the MapEngine class. It initializes the class and loads the map data. */
   public MapEngine() {
     loadMap(); // keep this method invocation
   }
 
-  /** invoked one time only when constructing the MapEngine class. */
+  /**
+   * This method is invoked one time only when constructing the MapEngine class. It is responsible
+   * for loading the adjacency list and initializing the graph.
+   */
   private void loadMap() {
     List<String> adjacencies = Utils.readAdjacencies();
     graph = new Graph();
@@ -41,6 +48,12 @@ public class MapEngine {
     }
   }
 
+  /**
+   * This method checks if the country input is valid.
+   *
+   * @param countryInput The country input to be checked.
+   * @return true if the country input is valid, false otherwise.
+   */
   public boolean validCountryInput(String countryInput) {
     List<String> countries = Utils.readCountries();
     for (String country : countries) {
@@ -55,6 +68,13 @@ public class MapEngine {
     return false;
   }
 
+  /**
+   * This method checks if the country input is valid and throws an exception if it is not.
+   *
+   * @param countryInput The country input to be checked.
+   * @return true if the country input is valid.
+   * @throws InvalidCountryException if the country input is not valid.
+   */
   public boolean checkInputException(String countryInput) throws InvalidCountryException {
     if (validCountryInput(countryInput) == false) {
       throw new InvalidCountryException();
@@ -62,6 +82,7 @@ public class MapEngine {
     return true;
   }
 
+  /** This method loops until User has entered a valid country input. */
   public void forceValidInput() {
     boolean isValid = false;
     while (isValid == false) {
@@ -82,7 +103,7 @@ public class MapEngine {
     MessageCli.COUNTRY_INFO.printMessage(countryName, continent, taxFees);
   }
 
-  /** this method is invoked when the user run the command route. */
+  /** This method is invoked when the user run the command route. */
   public void showRoute() {
     MessageCli.INSERT_COUNTRY.printMessage();
     forceValidInput();
