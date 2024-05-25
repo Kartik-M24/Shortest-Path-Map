@@ -55,10 +55,12 @@ public class MapEngine {
    * @return true if the country input is valid, false otherwise.
    */
   public boolean validCountryInput(String countryInput) {
-    List<String> countries = Utils.readCountries();
+    List<String> countries = Utils.readCountries(); // reads the countries from the csv file
     for (String country : countries) {
       String[] countryData = country.split(",");
-      if (countryData[0].equals(countryInput)) {
+      if (countryData[0].equals(countryInput)) { // checks if the country input is valid
+        // If it is valid, gets the country name, continent and tax fees for that country to be used
+        // in other methods
         countryName = countryData[0];
         continent = countryData[1];
         taxFees = countryData[2];
@@ -85,12 +87,14 @@ public class MapEngine {
   /** This method loops until User has entered a valid country input. */
   public void forceValidInput() {
     boolean isValid = false;
-    while (isValid == false) {
-      countryInput = Utils.scanner.nextLine();
-      countryInput = Utils.capitalizeFirstLetterOfEachWord(countryInput);
+    while (isValid == false) { // loops until the user enters a valid country
+      countryInput = Utils.scanner.nextLine(); // gets the country input from the user
+      countryInput =
+          Utils.capitalizeFirstLetterOfEachWord(
+              countryInput); // capitalizes the starting letter of each word
       try {
         isValid = checkInputException(countryInput);
-      } catch (InvalidCountryException e) {
+      } catch (InvalidCountryException e) { // catches the exception if the country input is invalid
         MessageCli.INVALID_COUNTRY.printMessage(countryInput);
       }
     }
@@ -98,6 +102,7 @@ public class MapEngine {
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
+    // Get the country information and print it
     MessageCli.INSERT_COUNTRY.printMessage();
     forceValidInput();
     MessageCli.COUNTRY_INFO.printMessage(countryName, continent, taxFees);
@@ -105,19 +110,21 @@ public class MapEngine {
 
   /** This method is invoked when the user run the command route. */
   public void showRoute() {
-    MessageCli.INSERT_COUNTRY.printMessage();
+    // Get the source and destination countries
+    MessageCli.INSERT_SOURCE.printMessage();
     forceValidInput();
     Countries sourceCountry = graph.getCountry(countryInput);
     MessageCli.INSERT_DESTINATION.printMessage();
     forceValidInput();
     Countries destinationCountry = graph.getCountry(countryInput);
 
+    // Get the appropriate values and print the route information
     if (sourceCountry.getName().equals(destinationCountry.getName())) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
     } else {
       List<Countries> routeReferences =
-          graph.breathFirstTraversal(sourceCountry, destinationCountry);
+          graph.breathFirstTraversalRouteFinder(sourceCountry, destinationCountry);
       CopyOnWriteArrayList<String> continentsRoute = new CopyOnWriteArrayList<>();
       int totalTax = 0;
       StringBuilder routeList = new StringBuilder();

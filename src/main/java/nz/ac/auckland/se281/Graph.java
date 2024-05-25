@@ -90,7 +90,7 @@ public class Graph {
    * @param destination the destination country
    * @return the shortest route from the root country to the destination country
    */
-  public List<Countries> breathFirstTraversal(Countries root, Countries destination) {
+  public List<Countries> breathFirstTraversalRouteFinder(Countries root, Countries destination) {
     this.destination = destination;
     this.root = root;
     List<Countries> visited = new LinkedList<>();

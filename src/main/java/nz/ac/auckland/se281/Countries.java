@@ -28,16 +28,19 @@ public class Countries {
    */
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) {
+    if (obj == this) { // checks if the object is the same as this country
       return true;
     }
-    if (obj == null || obj.getClass() != this.getClass()) {
+    if (obj == null
+        || obj.getClass()
+            != this
+                .getClass()) { // checks if the object is null or not the same class as this country
       return false;
     }
-    if (!(obj instanceof Countries)) {
+    if (!(obj instanceof Countries)) { // checks if the object is an instance of this country
       return false;
     }
-    Countries country = (Countries) obj;
+    Countries country = (Countries) obj; // casts the object to a country 
     return name.equals(country.name);
   }
 
