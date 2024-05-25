@@ -90,8 +90,7 @@ public class MapEngine {
     while (isValid == false) { // loops until the user enters a valid country
       countryInput = Utils.scanner.nextLine(); // gets the country input from the user
       try {
-        countryInput = Utils.capitalizeFirstLetterOfEachWord(countryInput);
-        isValid = checkInputException(countryInput);
+        isValid = checkInputException(Utils.capitalizeFirstLetterOfEachWord(countryInput));
       } catch (InvalidCountryException e) { // catches the exception if the country input is invalid
         MessageCli.INVALID_COUNTRY.printMessage(countryInput);
       }
