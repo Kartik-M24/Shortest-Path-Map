@@ -92,7 +92,8 @@ public class MapEngine {
       try {
         isValid = checkInputException(Utils.capitalizeFirstLetterOfEachWord(countryInput));
       } catch (InvalidCountryException e) { // catches the exception if the country input is invalid
-        MessageCli.INVALID_COUNTRY.printMessage(countryInput);
+        MessageCli.INVALID_COUNTRY.printMessage(
+            Utils.capitalizeFirstLetterOfEachWord(countryInput));
       }
     }
   }
@@ -110,10 +111,11 @@ public class MapEngine {
     // Get the source and destination countries
     MessageCli.INSERT_SOURCE.printMessage();
     forceValidInput();
-    Countries sourceCountry = graph.getCountry(countryInput);
+    Countries sourceCountry = graph.getCountry(Utils.capitalizeFirstLetterOfEachWord(countryInput));
     MessageCli.INSERT_DESTINATION.printMessage();
     forceValidInput();
-    Countries destinationCountry = graph.getCountry(countryInput);
+    Countries destinationCountry =
+        graph.getCountry(Utils.capitalizeFirstLetterOfEachWord(countryInput));
 
     // Get the appropriate values and print the route information
     if (sourceCountry.getName().equals(destinationCountry.getName())) {
