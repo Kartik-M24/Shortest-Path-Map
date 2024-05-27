@@ -1,7 +1,8 @@
 package nz.ac.auckland.se281;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
 
 /**
  * This class is the main entry point for the MapEngine application. It is responsible for loading
@@ -124,13 +125,13 @@ public class MapEngine {
     } else {
       List<Countries> routeReferences =
           graph.breathFirstTraversalRouteFinder(sourceCountry, destinationCountry);
-      CopyOnWriteArrayList<String> continentsRoute = new CopyOnWriteArrayList<>();
+      Set<String> continentsRoute = new LinkedHashSet<>();
       int totalTax = 0;
       StringBuilder routeList = new StringBuilder();
 
       for (int i = 0; i < routeReferences.size(); i++) {
         routeList.append(routeReferences.get(i).getName());
-        continentsRoute.addIfAbsent(routeReferences.get(i).getContinent());
+        continentsRoute.add(routeReferences.get(i).getContinent());
         if (i >= 1) {
           totalTax += routeReferences.get(i).getTaxFees();
         }
