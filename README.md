@@ -1,7 +1,6 @@
 This java based application is based on the following map:
 
-![image](https://github.com/KartikM24/Shortest-Path-Map/assets/86750762/42c5f970-ce73-4337-81ec-9bf0cab8fc5f)
-
+![image](https://github.com/KartikM24/Shortest-Path-Map/assets/86750762/a9fe3b77-5a56-4eb5-99f7-7c765e39198d)
 
 It uses the BFS algorithm to determine the shortest path between two countries and the cost of travel.
 
